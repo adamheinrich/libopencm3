@@ -190,6 +190,19 @@ SECTIONS
 
 	. = ALIGN(4);
 	end = .;
+
+	/*
+	 * The .stack section ensures there is enough stack space left in RAM.
+	 */
+	.stack : {
+#if defined(_STACK_SIZE)
+		PROVIDE(_stack_size = _STACK_SIZE);
+#else
+		PROVIDE(_stack_size = 512);
+#endif
+		. = . + _stack_size;
+		. = ALIGN(4);
+	}
 }
 
 PROVIDE(_stack = ORIGIN(ram) + LENGTH(ram));
